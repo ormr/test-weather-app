@@ -46,49 +46,6 @@ export const Table: React.FC<TableProps> = ({ show }) => {
 
   const cities = useSelector(selectCities);
 
-  let TableBody: (JSX.Element | null)[];
-
-  switch (show) {
-    case 'ACTIVE':
-      TableBody = cities.map((city, index) => {
-        return city.status === 'ACTIVE' ? (
-          <TableRow
-            key={city.id}
-            index={index + 1}
-            city={city}
-            onChangeRow={openRenameRowModalShow}
-            onDeleteRow={openDeleteRowModalShow}
-          />
-        ) : null;
-      });
-      break;
-    case 'DELETED':
-      TableBody = cities.map((city, index) => {
-        return city.status === 'DELETED' ? (
-          <TableRow
-            key={city.id}
-            index={index + 1}
-            city={city}
-            onChangeRow={openRenameRowModalShow}
-            onDeleteRow={openDeleteRowModalShow}
-          />
-        ) : null;
-      });
-      break;
-    default:
-      TableBody = cities.map((city, index) => {
-        return (
-          <TableRow
-            key={city.id}
-            index={index + 1}
-            city={city}
-            onChangeRow={openRenameRowModalShow}
-            onDeleteRow={openDeleteRowModalShow}
-          />
-        );
-      });
-  }
-
   return (
     <>
       <BootstrapTable striped bordered hover size="sm">
@@ -100,7 +57,19 @@ export const Table: React.FC<TableProps> = ({ show }) => {
             <th>Действия</th>
           </tr>
         </thead>
-        <tbody>{TableBody}</tbody>
+        <tbody>
+          {cities.map((city, index) => {
+            return city.status === show || show === 'ALL' ? (
+              <TableRow
+                key={city.id}
+                index={index + 1}
+                city={city}
+                onChangeRow={openRenameRowModalShow}
+                onDeleteRow={openDeleteRowModalShow}
+              />
+            ) : null;
+          })}
+        </tbody>
       </BootstrapTable>
       <ChangeRowModal
         show={changeRow.show && changeRow.modal === 'CHANGE'}
